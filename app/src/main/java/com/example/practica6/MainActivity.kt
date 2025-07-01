@@ -81,10 +81,38 @@ class MainActivity : AppCompatActivity() {
         return texto // Se retorna el texto leído
     }
 
+    fun borrar(){
+        try {
+            // Obtiene la ruta de almacenamiento externo de la app
+            val rutaSD = baseContext.getExternalFilesDir(null)?.absolutePath
+            val carpeta = File(rutaSD, "carpeta") // Crea referencia a la carpeta
+            val archivoFisico = File(carpeta, "datos.txt")
+
+            if (archivoFisico.exists()) {
+                archivoFisico.writeText("") // Esto borra el contenido, pero no el archivo
+                Toast.makeText(this, "Archivo vaciado correctamente", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No hay archivo que borrar", Toast.LENGTH_SHORT).show()
+            }
+        }catch (e: Exception){
+            // Muestra un mensaje si hay error al guardar
+            Toast.makeText(this, "No se pudo borrar", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     // Función que se ejecuta cuando el usuario da clic al botón (desde XML)
     fun aceptar(vista: View) {
         val texto = cdato.text.toString() // Obtiene el texto que el usuario escribió
         guardar(texto)                    // Lo guarda en el archivo
+
+    }
+
+    fun ver(view: View){
         cinfo.text = leer()              // Luego lee todo el archivo y lo muestra en pantalla
+    }
+
+    fun borrarContenido(view: View){
+        borrar()
+        cinfo.text = "" // Borra lo que se ve en pantalla también
     }
 }
